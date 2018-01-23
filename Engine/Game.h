@@ -30,6 +30,7 @@
 #include "SpriteCodex.h"
 #include "Power.h"
 #include <vector>
+#include <algorithm>
 
 class Game
 {
@@ -46,6 +47,14 @@ private:
 	/********************************/
 	bool isGoodInput();
 	bool isNextASegment();
+	bool isNextAPower();
+
+
+	//game loop functions
+	void GetInputFromKeybrd();
+	void UpdatePowerUps();
+	void UpdateSnake();
+
 private:
 	MainWindow& wnd;
 	Graphics gfx;
@@ -56,13 +65,20 @@ private:
 	static constexpr int powers = 5;
 
 
+	//testvar for win condition
+	int test = 0;
+	//
+
 	Board board;
 	Snake snake;
 	Location _delta_loc = { 1,0 };
 	std::vector<Power> _powers;
 
-	static constexpr int snekMovePeriod = 5;
+
+	int _nPowersEaten = 0;
+	int snekMovePeriod = 20;
 	int snekMoveCounter = 0;
+	bool _DidTheSnakeJustEat;
 
 	bool isGameOver = false;
 	std::mt19937 rng;

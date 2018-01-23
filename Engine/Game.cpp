@@ -47,89 +47,27 @@ void Game::Go()
 void Game::UpdateModel()
 {
 
-	if (!this->isGameOver) {
+	if (!this->isGameOver) 
+	{
+		GetInputFromKeybrd();
+		UpdatePowerUps();
+		UpdateSnake();
+		
 
-	
-		if (this->isGoodInput())
+		if (this->_DidTheSnakeJustEat)
 		{
-
-	
-		if (wnd.kbd.KeyIsPressed(VK_DOWN))
-		{
-			this->_delta_loc = { 0,1 };
-		}
-		else if (wnd.kbd.KeyIsPressed(VK_LEFT))
-		{
-			this->_delta_loc = { -1,0 };
-		}
-		else if (wnd.kbd.KeyIsPressed(VK_RIGHT))
-		{
-			this->_delta_loc = { 1,0 };
-		}
-		else if (wnd.kbd.KeyIsPressed(VK_UP))
-		{
-			this->_delta_loc = { 0,-1 };
-		}
-		}
-
-
-
-
-		this->snekMoveCounter++;
-
-
-		if (snekMoveCounter >= snekMovePeriod)
-		{
-			snekMoveCounter = 0;
-			if (!board.isInsideBoard(snake.GetNextHeadLocation(this->_delta_loc)))
-			{
-
-
-				this->isGameOver = true;
-			}
-
-			//if the next is a segment, game is over
-			if (this->isNextASegment())
-			{
-				this->isGameOver = true;
-			}
-			else {
-
-				if (wnd.kbd.KeyIsPressed(VK_CONTROL))
-				{
-					snake.Grow();
-					
-				}
-				snake.MoveBy(this->_delta_loc);
-			}
+			snekMovePeriod--;
+			_DidTheSnakeJustEat = false;
 		}
 
 	}
+
 }
 void Game::ComposeFrame()
 {
-
-	//counter2.print(wnd.mouse.GetPosY());
-
-	/////
-	/////
-	//std::uniform_int_distribution<int> colorDist(0, 255);
-	//
-	//for (int y = 0; y < this->board.GetHeight(); y++)
-	//{
-	//	for (int x = 0; x < this->board.GetWidth(); x++)
-	//	{
-	//		Location loc = { x,y };
-	//		Color c(colorDist(rng), colorDist(rng), colorDist(rng));
-	//		this->board.DrawCell(loc, c);
-	//	}
-	//}
-
 	
 
-	//Sleep(100);
 
-	//SpriteCodex::DrawTitle(350, 250, gfx);
 
 	if (this->isGameOver == true)
 	{
@@ -138,56 +76,36 @@ void Game::ComposeFrame()
 	else
 	{
 		snake.Draw(board);
+
+		auto itb = _powers.begin();
+		auto ite = _powers.end();
+
+		for (; itb < ite; itb++)
+		{
+			itb->Draw(board);
+		}
+
 	}
 
 
-	int x = 0;
-	int y = 0;
-
-	//while(snake.isSpotFreeOfSegments())
-
-
-	//std::uniform_int_distribution<int> ranx(0, board.GetWidth());
-	//std::uniform_int_distribution<int> rany(0, board.GetHeight());
-	//
-	//while (this->_powers.size() < 10)
-	//{
-	//	Location foodloc = { ranx(rng),rany(rng) };
-	//	while (this->snake.isSpotFreeOfSegments(foodloc))
-	//	{
-	//		foodloc = { ranx(rng),rany(rng) };
-	//		Power p(foodloc, Colors::Red);
-	//		this->_powers.push_back(p);
-	//	}
-	//}
-
-	if (count < 1)
-	{
-		Location foodloc = { 50,50 };
-		Power p(foodloc, Colors::Red);
-		this->_powers.push_back(p);
-	}
-	
-
-		
-	//for (int y = 0; y < this->board.GetHeight(); y++)
-	//{
-	//	for (int x = 0; x < this->board.GetWidth(); x++)
-	//	{
-	//		//Location loc = { x,y };
-	//		Color c(colorDist(rng), colorDist(rng), colorDist(rng));
-	//		this->board.DrawCell(loc, c);
-	//	}
-	//}
 
 
 
-	//////
-	//////DEBUG SHIT
-	SevenSegment counter(5, 0, 1, Colors::Red, gfx);
-	SevenSegment counter2(5, 50, 1, Colors::Red, gfx);
+	//////DEBUG 
+	SevenSegment counter(700, 150, 1, Colors::Red, gfx);
+	SevenSegment xcounter(700, 0, 1, Colors::LightGray, gfx);
+	SevenSegment ycounter(700, 50, 1, Colors::LightGray, gfx);
+	SevenSegment gameendcode(700, 100, 1, Colors::Red, gfx);
+	SevenSegment howmanyeaten(0, 0, 1, Colors::Blue, gfx);
+
+
+	howmanyeaten.print(_nPowersEaten);
+	gameendcode.print(test);
 	counter.print(count);
 	count++;
+	xcounter.print(snake._segments[0].GetLoc().x);
+	ycounter.print(snake._segments[0].GetLoc().y);
+
 }
 
 
@@ -216,6 +134,10 @@ bool Game::isGoodInput()
 	{
 		fail_flag = true;
 	}
+
+
+
+
 	return !fail_flag;
 }
 bool Game::isNextASegment()
@@ -235,3 +157,113 @@ bool Game::isNextASegment()
 	}
 	return isit;
 }
+bool Game::isNextAPower()
+{
+	bool isit = false;
+	Location headloc = this->snake.GetNextHeadLocation(this->_delta_loc);
+
+
+	//////////CREATING NEW POWER UPS
+
+	for (int i = 0; i<	this->_powers.size(); i++)
+	{
+		if (headloc == this->_powers[i].GetLoc())
+		{
+
+			isit = true;
+			//swap
+			std::swap(_powers[i], _powers[_powers.size() - 1]);
+			_powers.pop_back();
+		}
+	}
+
+
+
+	return isit;
+}
+
+void Game::GetInputFromKeybrd()
+{
+
+	Location current = this->_delta_loc;
+
+	if (this->isGoodInput())
+	{
+		if (wnd.kbd.KeyIsPressed(VK_DOWN))
+		{
+			this->_delta_loc = { 0,1 };
+		}
+		else if (wnd.kbd.KeyIsPressed(VK_LEFT))
+		{
+			this->_delta_loc = { -1,0 };
+		}
+		else if (wnd.kbd.KeyIsPressed(VK_RIGHT))
+		{
+			this->_delta_loc = { 1,0 };
+		}
+		else if (wnd.kbd.KeyIsPressed(VK_UP))
+		{
+			this->_delta_loc = { 0,-1 };
+		}
+	}
+	else {
+		this->_delta_loc = current;
+	}
+	this->snekMoveCounter++;
+}
+
+void Game::UpdatePowerUps()
+{
+	std::uniform_int_distribution<int> ranx(1, board.GetWidth()-1);
+	std::uniform_int_distribution<int> rany(1, board.GetHeight()-1);
+
+	while (this->_powers.size() < 20)
+	{
+		Location foodloc = { ranx(rng) / board.GetDem(),rany(rng) / board.GetDem() };
+		while (!this->snake.isSpotFreeOfSegments(foodloc))
+		{
+			foodloc = { ranx(rng) / board.GetDem(),rany(rng) / board.GetDem() };
+		}
+		Power p(foodloc, Colors::Magenta);
+		this->_powers.push_back(p);
+		if (this->_powers.size() >= 10) {
+			break;
+		}
+
+	}
+}
+void Game::UpdateSnake()
+{
+	if (snekMoveCounter >= snekMovePeriod)
+	{
+		snekMoveCounter = 0;
+		if (!board.isInsideBoard(snake.GetNextHeadLocation(this->_delta_loc)))
+		{
+			test = 2;//2 means next was out of bounds
+			this->isGameOver = true;
+		}
+
+		//if the next is a segment, game is over
+		if (this->isNextASegment())
+		{
+			test = 1;//1 means next was a segment
+			//this->isGameOver = true;
+		}
+
+		else {
+			if (this->isNextAPower())
+			{
+				snake.Grow();
+				_nPowersEaten++;
+				_DidTheSnakeJustEat = true;
+				snake.MoveBy(this->_delta_loc);
+			}
+			else
+			{
+
+				snake.MoveBy(this->_delta_loc);
+			}
+		}
+	}
+}
+
