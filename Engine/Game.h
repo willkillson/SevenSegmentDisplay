@@ -24,6 +24,12 @@
 #include "Mouse.h"
 #include "Graphics.h"
 #include "SevenSegment.h"
+#include "Board.h"
+#include <random>
+#include "Snake.h"
+#include "SpriteCodex.h"
+#include "Power.h"
+#include <vector>
 
 class Game
 {
@@ -38,6 +44,8 @@ private:
 	/********************************/
 	/*  User Functions              */
 	/********************************/
+	bool isGoodInput();
+	bool isNextASegment();
 private:
 	MainWindow& wnd;
 	Graphics gfx;
@@ -45,5 +53,17 @@ private:
 	/*  User Variables              */
 	/********************************/
 	int count = 0;
+	static constexpr int powers = 5;
 
+
+	Board board;
+	Snake snake;
+	Location _delta_loc = { 1,0 };
+	std::vector<Power> _powers;
+
+	static constexpr int snekMovePeriod = 5;
+	int snekMoveCounter = 0;
+
+	bool isGameOver = false;
+	std::mt19937 rng;
 };

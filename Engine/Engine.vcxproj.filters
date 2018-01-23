@@ -16,6 +16,12 @@
     <Filter Include="Shaders">
       <UniqueIdentifier>{8b6c92a8-f65d-451e-80e3-d65773602b92}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\MY">
+      <UniqueIdentifier>{92c05bed-0377-4d50-806f-a890926ced8c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\MY">
+      <UniqueIdentifier>{511b4109-953b-4563-af28-3275af534458}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ChiliWin.h">
@@ -25,9 +31,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="DXErr.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Game.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Graphics.h">
@@ -51,15 +54,27 @@
     <ClInclude Include="SpriteCodex.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SevenSegment.h">
+    <ClInclude Include="Location.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Board.h">
+      <Filter>Header Files\MY</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.h">
+      <Filter>Header Files\MY</Filter>
+    </ClInclude>
+    <ClInclude Include="Power.h">
+      <Filter>Header Files\MY</Filter>
+    </ClInclude>
+    <ClInclude Include="SevenSegment.h">
+      <Filter>Header Files\MY</Filter>
+    </ClInclude>
+    <ClInclude Include="Snake.h">
+      <Filter>Header Files\MY</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DXErr.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Game.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Graphics.cpp">
@@ -80,7 +95,22 @@
     <ClCompile Include="SpriteCodex.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Location.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Board.cpp">
+      <Filter>Source Files\MY</Filter>
+    </ClCompile>
+    <ClCompile Include="Game.cpp">
+      <Filter>Source Files\MY</Filter>
+    </ClCompile>
+    <ClCompile Include="Snake.cpp">
+      <Filter>Source Files\MY</Filter>
+    </ClCompile>
     <ClCompile Include="SevenSegment.cpp">
+      <Filter>Source Files\MY</Filter>
+    </ClCompile>
+    <ClCompile Include="Power.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

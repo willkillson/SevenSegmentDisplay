@@ -22,7 +22,7 @@ public:
 		this->_c = c;
 		this->_gfx = &gfx;
 	}
-	void print(int x);;
+	void print(int x);
 
 private:
 	void _DrawNumber(int x);//Prints an int from 0 - 9 
