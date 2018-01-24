@@ -48,7 +48,7 @@ void Game::ComposeFrame()
 	
 
 
-	SevenSegment counter(200, 200, 1, Colors::Red, gfx);
+	SevenSegment counter(0, 0, 1, Colors::Red, gfx);
 
 
 	counter.print(count);
